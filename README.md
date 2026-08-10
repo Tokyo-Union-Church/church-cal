@@ -52,6 +52,8 @@ https://calendar.example.org/?calendars=church,groups
 
 An empty value (`?calendars=`) starts with every source hidden.
 
+Month view uses FullCalendar's native automatic event display: timed events receive a source-colored dot, while all-day and multi-day events retain FullCalendar's block treatment.
+
 ## Google API key restrictions
 
 The key is delivered to browsers and must not be treated as a secret. Restrict it in Google Cloud Console:

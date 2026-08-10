@@ -66,7 +66,7 @@ const calendar = new Calendar(calendarElement, {
     return date.toLocaleDateString(appConfig.locale, { weekday: "short" }).slice(0, 2).toUpperCase();
   },
   dayMaxEvents: true,
-  eventDisplay: "block",
+  eventDisplay: "auto",
   fixedWeekCount: true,
   showNonCurrentDates: false,
   eventTimeFormat: {
