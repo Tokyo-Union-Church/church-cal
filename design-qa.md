@@ -12,7 +12,7 @@
 - Normalized comparison pixels: 1954 x 1423 per side; the source was top-cropped without scaling to the browser capture height
 - Desktop CSS viewport: 1954 x 1662 at device pixel ratio 1
 - Mobile CSS viewport and capture: 390 x 844 at device pixel ratio 1
-- State: August 2026, empty event data because Google Calendar IDs and API key are intentionally not configured yet
+- Captured state: August 2026 with empty event data. Live-feed and view-control behavior was verified separately after the two public calendars were configured.
 
 ## Full-view comparison
 
@@ -24,7 +24,7 @@ The reference's event photography is calendar content rather than calendar chrom
 
 - Toolbar: title scale, serif weight, arrow position, and whitespace were compared directly and tightened after the first capture.
 - Weekday/grid transition: header capitalization, muted gray, header-to-grid spacing, cell fill, gutter thickness, and date alignment were compared directly.
-- Mobile: the responsive list state keeps the same editorial title and minimal navigation, with a clean empty state.
+- Mobile: the responsive month grid keeps the same editorial title and minimal navigation; visitors can explicitly switch to list view.
 
 ## Required fidelity surfaces
 
@@ -32,7 +32,7 @@ The reference's event photography is calendar content rather than calendar chrom
 - Spacing and layout rhythm: outer padding, toolbar distribution, large title-to-weekday gap, weekday-to-grid gap, seven equal columns, six rows, and grid aspect ratio were measured and adjusted. No horizontal overflow is present.
 - Colors and visual tokens: canvas `#ffffff`, cells `#f7f7f7`, ink `#33312e`, and muted text `#777674` reproduce the near-white neutral palette without dark button chrome or colored card treatments.
 - Image quality and asset fidelity: no app-owned imagery is required. Reference event photos are sample content and were not replaced with placeholders or generated approximations.
-- Copy and content: month, weekday abbreviations, date numbers, loading/setup states, and no-events copy are correct. Live event copy cannot be compared until calendars are configured.
+- Copy and content: month, weekday abbreviations, date numbers, loading/setup states, and no-events copy are correct. Both configured Google Calendar feeds were verified with live test events.
 
 ## Comparison history
 
@@ -48,6 +48,13 @@ The reference's event photography is calendar content rather than calendar chrom
 - Fix: reduced top padding and title scale, tightened toolbar and weekday spacing, and adjusted the calendar aspect ratio to match the source's cell proportions.
 - Post-fix evidence: the final normalized side-by-side comparison aligns the title hierarchy, weekday band, grid start, and cell density.
 
+### Iteration 3
+
+- P1: narrow viewports automatically selected list view instead of preserving the requested month-grid experience.
+- Fix: made month grid the default at every viewport and added an explicit, keyboard-accessible Month/List selector.
+- P1: live event text inherited a white foreground and lacked contrast against pale day cells.
+- Fix: set a dark event-source text color and reinforced it through the supported FullCalendar render-hook classes.
+
 ## Findings
 
 No actionable P0, P1, or P2 visual differences remain within the requested styling scope.
@@ -56,7 +63,9 @@ No actionable P0, P1, or P2 visual differences remain within the requested styli
 
 - Previous/next month controls render and remain keyboard-accessible.
 - Next-month interaction changed the heading from August 2026 to September 2026.
-- Mobile breakpoint selects list view at 390 px.
+- Month grid remains the initial view at narrow and desktop widths.
+- Month/List controls switch views in both directions and expose their active state through `aria-pressed`.
+- Both public Google Calendar feeds load and their source filters work.
 - Calendar-source behavior remains covered by three passing unit tests.
 - Final clean browser load produced no console warnings or errors.
 

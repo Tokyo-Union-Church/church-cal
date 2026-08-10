@@ -13,6 +13,7 @@ import "./styles.css";
 const calendarElement = requiredElement("calendar");
 const filtersElement = requiredElement("calendar-filters");
 const statusElement = requiredElement("calendar-status");
+const viewButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-calendar-view]")];
 const definitions = configuredCalendars(calendarDefinitions);
 const enabledIds = initialEnabledIds();
 
@@ -21,7 +22,7 @@ const calendar = new Calendar(calendarElement, {
   googleCalendarApiKey: appConfig.googleCalendarApiKey,
   timeZone: appConfig.timeZone,
   locale: appConfig.locale,
-  initialView: window.matchMedia("(max-width: 700px)").matches ? "listMonth" : "dayGridMonth",
+  initialView: "dayGridMonth",
   aspectRatio: 1.25,
   borderless: true,
   headerToolbar: {
@@ -74,6 +75,9 @@ const calendar = new Calendar(calendarElement, {
     meridiem: "short",
   },
   eventSources: definitions.filter(({ id }) => enabledIds.has(id)).map(toEventSource),
+  viewDidMount({ view }) {
+    updateViewButtons(view.type);
+  },
   loading(isLoading) {
     statusElement.textContent = isLoading ? "Loading events…" : "";
   },
@@ -83,6 +87,7 @@ const calendar = new Calendar(calendarElement, {
 });
 
 renderFilters();
+renderViewControls();
 
 if (!appConfig.googleCalendarApiKey || definitions.length === 0) {
   statusElement.textContent = setupMessage();
@@ -119,8 +124,25 @@ function toEventSource(definition: CalendarDefinition) {
     id: definition.id,
     googleCalendarId: definition.googleCalendarId,
     color: definition.color,
+    textColor: "#33312e",
     className: `calendar-source-${definition.id}`,
   };
+}
+
+function renderViewControls(): void {
+  for (const button of viewButtons) {
+    button.addEventListener("click", () => {
+      const view = button.dataset.calendarView;
+      if (view) calendar.changeView(view);
+    });
+  }
+}
+
+function updateViewButtons(activeView: string): void {
+  for (const button of viewButtons) {
+    const isActive = button.dataset.calendarView === activeView;
+    button.setAttribute("aria-pressed", String(isActive));
+  }
 }
 
 function renderFilters(): void {

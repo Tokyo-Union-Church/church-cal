@@ -16,26 +16,20 @@ export interface CalendarDefinition {
 export const calendarDefinitions: CalendarDefinition[] = [
   {
     id: "church",
-    label: "Church events",
-    googleCalendarId: "",
-    color: "#9a4a3a",
+    label: "Tokyo Union Church Events",
+    googleCalendarId:
+      "c_df7c3d64c2f86d0e1765a0eb40a02941a2ba01805909874f772d2a0c5eedda15@group.calendar.google.com",
+    color: "#5BC6C9",
     enabledByDefault: true,
     userToggleable: true,
   },
   {
     id: "groups",
-    label: "Groups",
-    googleCalendarId: "",
-    color: "#456b5b",
+    label: "Tokyo Union Church Groups",
+    googleCalendarId:
+      "c_3c130e8c2ac9186920afc3383a911704f360f56b86a7e3e79d9432bbf4947825@group.calendar.google.com",
+    color: "#96B5D9",
     enabledByDefault: true,
-    userToggleable: true,
-  },
-  {
-    id: "community",
-    label: "Community",
-    googleCalendarId: "",
-    color: "#536d8d",
-    enabledByDefault: false,
     userToggleable: true,
   },
 ];

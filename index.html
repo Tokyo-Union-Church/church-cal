@@ -9,6 +9,14 @@
   <body>
     <main class="calendar-shell">
       <nav id="calendar-filters" class="calendar-filters" aria-label="Calendar filters"></nav>
+      <nav class="calendar-views" aria-label="Calendar view">
+        <button class="calendar-view-button" type="button" data-calendar-view="dayGridMonth" aria-pressed="true">
+          Month
+        </button>
+        <button class="calendar-view-button" type="button" data-calendar-view="listMonth" aria-pressed="false">
+          List
+        </button>
+      </nav>
       <div id="calendar" aria-label="Church events calendar"></div>
       <div id="calendar-status" class="calendar-status" role="status" aria-live="polite"></div>
     </main>
