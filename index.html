@@ -20,6 +20,15 @@
       <div id="calendar" aria-label="Church events calendar"></div>
       <div id="calendar-status" class="calendar-status" role="status" aria-live="polite"></div>
     </main>
+    <dialog id="event-dialog" class="event-dialog" aria-labelledby="event-dialog-title">
+      <button id="event-dialog-close" class="event-dialog-close" type="button" aria-label="Close event details">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <div id="event-dialog-source" class="event-dialog-source"></div>
+      <h2 id="event-dialog-title" class="event-dialog-title"></h2>
+      <dl id="event-dialog-details" class="event-dialog-details"></dl>
+      <div id="event-dialog-description" class="event-dialog-description"></div>
+    </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

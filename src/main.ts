@@ -13,6 +13,12 @@ import "./styles.css";
 const calendarElement = requiredElement("calendar");
 const filtersElement = requiredElement("calendar-filters");
 const statusElement = requiredElement("calendar-status");
+const eventDialog = requiredDialog("event-dialog");
+const eventDialogClose = requiredElement("event-dialog-close");
+const eventDialogSource = requiredElement("event-dialog-source");
+const eventDialogTitle = requiredElement("event-dialog-title");
+const eventDialogDetails = requiredElement("event-dialog-details");
+const eventDialogDescription = requiredElement("event-dialog-description");
 const viewButtons = [...document.querySelectorAll<HTMLButtonElement>("[data-calendar-view]")];
 const definitions = configuredCalendars(calendarDefinitions);
 const enabledIds = initialEnabledIds();
@@ -83,6 +89,10 @@ const calendar = new Calendar(calendarElement, {
   eventDidMount({ el, event, view }) {
     if (view.type.startsWith("dayGrid")) el.title = event.title;
   },
+  eventClick(info) {
+    info.jsEvent.preventDefault();
+    showEventDetails(info.event);
+  },
   viewDidMount({ view }) {
     updateViewButtons(view.type);
   },
@@ -103,10 +113,90 @@ if (!appConfig.googleCalendarApiKey || definitions.length === 0) {
 
 calendar.render();
 
+eventDialogClose.addEventListener("click", () => eventDialog.close());
+eventDialog.addEventListener("click", (event) => {
+  if (event.target === eventDialog) eventDialog.close();
+});
+
 function requiredElement(id: string): HTMLElement {
   const element = document.getElementById(id);
   if (!element) throw new Error(`Missing required element #${id}`);
   return element;
+}
+
+function requiredDialog(id: string): HTMLDialogElement {
+  const element = document.getElementById(id);
+  if (!(element instanceof HTMLDialogElement)) throw new Error(`Missing required dialog #${id}`);
+  return element;
+}
+
+function showEventDetails(event: ReturnType<typeof calendar.getEvents>[number]): void {
+  const definition = definitions.find(({ id }) => id === event.source?.id);
+  const description = descriptionText(event.extendedProps.description);
+  const location = stringProperty(event.extendedProps.location);
+
+  eventDialogSource.textContent = definition?.label ?? "Tokyo Union Church";
+  eventDialogSource.style.setProperty("--source-color", definition?.color ?? "#33312e");
+  eventDialogTitle.textContent = event.title;
+  eventDialogDetails.replaceChildren();
+  addDetail("When", formatEventDates(event.start, event.end, event.allDay));
+  if (location) addDetail("Where", location);
+
+  eventDialogDescription.textContent = description;
+  eventDialogDescription.hidden = !description;
+  eventDialog.showModal();
+}
+
+function addDetail(label: string, value: string): void {
+  const term = document.createElement("dt");
+  term.textContent = label;
+  const description = document.createElement("dd");
+  description.textContent = value;
+  eventDialogDetails.append(term, description);
+}
+
+function formatEventDates(start: Date | null, end: Date | null, allDay: boolean): string {
+  if (!start) return "Date and time unavailable";
+
+  const options: Intl.DateTimeFormatOptions = allDay
+    ? { weekday: "long", year: "numeric", month: "long", day: "numeric" }
+    : {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      };
+  const formatter = new Intl.DateTimeFormat(appConfig.locale, {
+    ...options,
+    timeZone: appConfig.timeZone,
+  });
+
+  if (!end) return formatter.format(start);
+  const displayEnd = allDay ? new Date(end.getTime() - 1) : end;
+  if (displayEnd.getTime() <= start.getTime()) return formatter.format(start);
+  return formatter.formatRange(start, displayEnd);
+}
+
+function stringProperty(value: unknown): string {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function descriptionText(value: unknown): string {
+  const description = stringProperty(value);
+  if (!description) return "";
+
+  const parsed = new DOMParser().parseFromString(description, "text/html");
+  parsed.querySelectorAll("script, style").forEach((element) => element.remove());
+  parsed.querySelectorAll("br").forEach((element) => element.replaceWith("\n"));
+  parsed.querySelectorAll("p, div, li").forEach((element) => element.append("\n"));
+
+  return (parsed.body.textContent ?? "")
+    .replace(/\u00a0/g, " ")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }
 
 function initialEnabledIds(): Set<string> {

@@ -2,6 +2,8 @@
 
 A small, responsive calendar embed for Tokyo Union Church. It renders events from any number of public Google Calendars using FullCalendar Standard, lets visitors show or hide individual sources, and provides month-grid and list views. Its presentation mirrors Squarespace's spacious, editorial Calendar Block aesthetic while retaining Google Calendar as the source.
 
+Selecting an event opens an accessible, read-only details dialog inside the embed. This avoids sending visitors to Google Calendar's authenticated web interface and does not expose editing controls.
+
 The project is a static Vite/TypeScript application. It has no backend, database, paid FullCalendar dependency, or runtime secrets.
 
 ## Requirements
