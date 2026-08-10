@@ -54,6 +54,11 @@ const calendar = new Calendar(calendarElement, {
   eventInnerClass: "tuc-event-inner",
   eventTimeClass: "tuc-event-time",
   eventTitleClass: "tuc-event-title",
+  views: {
+    dayGrid: {
+      eventTitleClass: "tuc-daygrid-event-title",
+    },
+  },
   listDaysClass: "tuc-list-days",
   listDayClass: "tuc-list-day",
   listDayHeaderClass: "tuc-list-day-header",
@@ -75,6 +80,9 @@ const calendar = new Calendar(calendarElement, {
     meridiem: "short",
   },
   eventSources: definitions.filter(({ id }) => enabledIds.has(id)).map(toEventSource),
+  eventDidMount({ el, event, view }) {
+    if (view.type.startsWith("dayGrid")) el.title = event.title;
+  },
   viewDidMount({ view }) {
     updateViewButtons(view.type);
   },

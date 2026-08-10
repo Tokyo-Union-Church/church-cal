@@ -53,6 +53,7 @@ https://calendar.example.org/?calendars=church,groups
 An empty value (`?calendars=`) starts with every source hidden.
 
 Month view uses FullCalendar's native automatic event display: timed events receive a source-colored dot, while all-day and multi-day events retain FullCalendar's block treatment.
+Month-cell titles stay on one line so long names do not consume the row height used by FullCalendar's native `+ more` calculation; List view retains fully wrapped titles.
 
 ## Google API key restrictions
 

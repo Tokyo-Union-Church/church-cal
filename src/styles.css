@@ -258,7 +258,8 @@ input {
 .tuc-event:visited,
 .tuc-event .tuc-event-inner,
 .tuc-event .tuc-event-time,
-.tuc-event .tuc-event-title {
+.tuc-event .tuc-event-title,
+.tuc-event .tuc-daygrid-event-title {
   color: var(--ink) !important;
 }
 
@@ -277,6 +278,14 @@ input {
   overflow: visible;
   font-weight: 400;
   white-space: normal;
+}
+
+.tuc-daygrid-event-title {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tuc-more-link {
